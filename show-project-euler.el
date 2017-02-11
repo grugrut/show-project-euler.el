@@ -34,11 +34,16 @@
     (forward-line -1)
     (end-of-line)
     (setq to (point))
-    (setq response-string (replace-regexp-in-string "</?p>" ""
-          (buffer-substring-no-properties
-           from to)))
-    (switch-to-buffer (generate-new-buffer (format "*Problem %d*" num)))
-    (insert response-string)))
+    (setq response-string
+	  (replace-regexp-in-string "</?p>" ""
+				    (buffer-substring-no-properties
+				     from to)))
+    (kill-buffer (current-buffer))
+    (let ((buffer (generate-new-buffer (format "*Problem %d*" num))))
+      (set-buffer buffer)
+      (insert response-string)
+      (toggle-read-only buffer)
+      (display-buffer buffer))))
 
 (provide 'show-project-euler)
 
